@@ -9,6 +9,7 @@ parser.add_argument('--humanRef', action="store", dest="human_ref_path", help="P
 parser.add_argument('--mouseRef', action="store", dest="mouse_ref_path", help="Path to mouse reference genome")
 parser.add_argument('--concatRef', action="store", dest="out_file", help="Output concated reference file name")
 parser.add_argument('--tag', action="store", dest="tag", help="tag info to rename mouse contig")
+parser.add_argument('--human_tag', action="store", dest="tag", help="tag info to rename mouse contig") #AL mod
 
 args = parser.parse_args()
 
@@ -41,6 +42,10 @@ for i in range(len(mouse_ref)):
     if mouse_ref[i].startswith('>'):
         mouse_ref[i] = mouse_ref[i].strip('\n')+(f'_{args.tag}\n')
 
+#rename the human contigs #AL added this section
+for i in range(len(human_ref)):
+    if human_ref[i].startswith('>'):
+        human_ref[i] = human_ref[i].strip('\n')+(f'_{args.human_tag}\n')
 
 #export to new file
 with open (args.out_file, 'w+') as f:
