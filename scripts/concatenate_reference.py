@@ -9,7 +9,7 @@ parser.add_argument('--humanRef', action="store", dest="human_ref_path", help="P
 parser.add_argument('--mouseRef', action="store", dest="mouse_ref_path", help="Path to mouse reference genome")
 parser.add_argument('--concatRef', action="store", dest="out_file", help="Output concated reference file name")
 parser.add_argument('--tag', action="store", dest="tag", help="tag info to rename mouse contig")
-parser.add_argument('--human_tag', action="store", dest="tag", help="tag info to rename mouse contig") #AL mod
+parser.add_argument('--human_tag', action="store", dest="human_tag", help="tag info to rename human contig") #AL mod
 
 args = parser.parse_args()
 
