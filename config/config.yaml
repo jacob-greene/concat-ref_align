@@ -7,26 +7,27 @@
 #SELECT CORRECT REFERENCE GENOME
 #if the input is a cram file, specify the reference gnenome
 input_reference_genome: 
-'null'
+    'null'
 #/shared/biodata/ngs/Reference/iGenomes/Homo_sapiens/UCSC/hg38/Sequence/BWAIndex/genome.fa
 #input_reference_genome: 'null' #for bam file input
 
 #location of the concatref genome for mouse subtraction
 ConcatRef_genome:
- /fh/fast/henikoff_s/user/jgreene/refs/hg38_plus_mm10_BWA/GRCh38_plus_UCSC_mm10.fa #ConcatRef created by concatenate_reference.py
+    /fh/fast/henikoff_s/user/jgreene/refs/hg38_plus_mm10_BWA/GRCh38_plus_UCSC_mm10.fa #ConcatRef created by concatenate_reference.py
     #/path/to/GRCh38_plus_NCBI_GRCm38.fa #option used by Anna-Lisa in her projects
 
 #reference genome for realignment, with index files in same folder as .fa file
-human_reference_genome: 
-/shared/biodata/ngs/Reference/iGenomes/Homo_sapiens/UCSC/hg38/Sequence/BWAIndex/genome.fa #human reference genome
+human_reference_genome:
+    /shared/biodata/ngs/Reference/iGenomes/Homo_sapiens/UCSC/hg38/Sequence/BWAIndex/genome.fa #human reference genome
     #/path/to/GRCh38.fa #option used by Anna-Lisa in her projects
 
-tag: UCSC_mm10  #make sure to use the same tag info of ConcatRef
+tag: 
+    UCSC_mm10  #make sure to use the same tag info of ConcatRef
     #NCBI_GRCm38 #option used by Anna-Lisa in her projects
 
 #specify a path for the logs and results
-results_path: 
-/fh/fast/henikoff_s/user/jgreene/projects/sciCnT/data/DJ_Hs_BY_K27me3_KHRM3_220802/bams_ALL/concat-ref_OUT
+results_path:
+    /fh/fast/henikoff_s/user/jgreene/projects/sciCnT/data/DJ_Hs_BY_K27me3_KHRM3_220802/bams_ALL/concat-ref_OUT
 
 #SELECT CORRECT POLYMORPHIC SITES
 known_polymorphic_sites1:
@@ -37,19 +38,27 @@ known_polymorphic_sites2:
 
 #SELECT IF DATA IS WHOLE GENOME SEQUENCES OR NOT (True or False)
 #determines if rule get_wgs_metrics is run
-is_wgs: False
+is_wgs:
+    False
 
 #SELECT CORRECT BASE RECALIBRATOR GAP OPEN PENALTY
 #GATK recommends 40 for exomes and 30 for whole genomes
-base_recalibrator_gap_open_penalty: 30.0
+base_recalibrator_gap_open_penalty: 
+    30.0
 
 #can adjust the number of threads used for bwa based on the data
 #suggested this matches cluster_slurm.yaml ncpus for map_to_reference rule
-bwa_threads: 4
+bwa_threads:
+    4
 
 #tools used.  need to be module loaded first.  see snakemake file for loads
-bwa: /path/to/bwa
-samtools: /path/to/samtools
-java: /path/to/java
-gatk: /path/to/gatk
-picard_jar: /path/to/picard.jar
+bwa:
+    /path/to/bwa
+samtools:
+    /path/to/samtools
+java:
+    /path/to/java
+gatk:
+    /path/to/gatk
+picard_jar:
+    /path/to/picard.jar
