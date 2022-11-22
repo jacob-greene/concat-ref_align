@@ -29,7 +29,8 @@ rule all:
 		#concatRef metrics
 		expand(config['results_path']+"/{samples}/{samples}_ConcatRef_ASM.txt", samples=config["samples"]),
 		expand(config['results_path']+"/{samples}/{samples}_ConcatRef_wgs_metrics.txt", samples=config["samples"]),
-		#results from realignment
+		
+		#results from human realignment
 		expand(config['results_path']+"/{samples}/{samples}_marked_dup_metrics.txt", samples=config["samples"]),
 		expand(config['results_path']+"/{samples}/{samples}_recalibration_data.table", samples=config["samples"]),
 		expand(config['results_path']+"/{samples}/{samples}_recalibrated.bam", samples=config["samples"]),
@@ -37,7 +38,9 @@ rule all:
 		expand(config['results_path']+"/{samples}/{samples}_ASM.txt", samples=config["samples"]),
 		expand(config['results_path']+"/{samples}/{samples}_wgs_metrics.txt", samples=config["samples"]),
 		expand(config['results_path']+"/{samples}/{samples}_isize.txt", samples=config["samples"]),
-		expand(config['results_path']+"/{samples}/{samples}_isize.pdf", samples=config["samples"])
+		expand(config['results_path']+"/{samples}/{samples}_isize.pdf", samples=config["samples"]),
+		
+		#results from mouse realignment
 
 
 rule unmap:
@@ -154,6 +157,23 @@ rule remove_mouse:
 		tag = config["tag"]
 	shell:
 		"sh ./scripts/mod_pipe_ConcatRef.sh {params.path} {params.filename} {params.tag}"
+
+#new rule
+rule remove_human:
+	input:
+		sorted_bam = config['results_path']+"/{samples}/{samples}_ConcatRef_sorted.bam",
+		bai_index = config['results_path']+"/{samples}/{samples}_ConcatRef_sorted.bam.bai"
+	output:
+		sorted_bam_step_1 = temp(config['results_path']+"/{samples}/{samples}_ConcatRef_sorted.mouse.bam"),
+		sorted_bam_step_1_index = temp(config['results_path']+"/{samples}/{samples}_ConcatRef_sorted.mouse.bam.bai"),
+		sorted_clean_bam = temp(config['results_path']+"/{samples}/{samples}_ConcatRef_sorted.mouse.cleaned.bam"),
+		sorted_clean_bam_index = temp(config['results_path']+"/{samples}/{samples}_ConcatRef_sorted.mouse.cleaned.bam.bai")
+	params:
+		path = config['results_path']+"/{samples}/",
+		filename = "{samples}_ConcatRef_sorted.bam",
+		human_tag = config["human_tag"]
+	shell:
+		"sh ./scripts/mod_pipe_ConcatRef_mouse.sh {params.path} {params.filename} {params.human_tag}"
 
 
 #the following rules realign post mouse subtraction
