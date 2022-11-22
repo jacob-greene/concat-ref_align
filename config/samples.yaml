@@ -1,3 +1,5 @@
 samples:
-  sample_name_1: path/to/sample_1.bam
-  sample_name_2: path/to/sample_2.bam
+  #40cpw: /fh/fast/henikoff_s/user/jgreene/projects/sciCnT/data/DJ_Hs_BY_K27me3_KHRM3_220802/bams_ALL/hg38/bams_sorted/hg_DJ_Hs_BY_K27me3_KHRM3_40cpw_220802_sorted.bam
+  #20cpw: /fh/fast/henikoff_s/user/jgreene/projects/sciCnT/data/DJ_Hs_BY_K27me3_KHRM3_220802/bams_ALL/hg38/bams_sorted/hg_DJ_Hs_BY_K27me3_KHRM3_20cpw_220802_sorted.bam
+  #10cpw: /fh/fast/henikoff_s/user/jgreene/projects/sciCnT/data/DJ_Hs_BY_K27me3_KHRM3_220802/bams_ALL/hg38/bams_sorted/hg_DJ_Hs_BY_K27me3_KHRM3_10cpw_220802_sorted.bam
+  5cpw: /fh/fast/henikoff_s/user/jgreene/projects/sciCnT/data/DJ_Hs_BY_K27me3_KHRM3_220802/bams_ALL/hg38/bams_sorted/hg_DJ_Hs_BY_K27me3_KHRM3_5cpw_220802_sorted.bam
