@@ -5,5 +5,5 @@ export OUT=/fh/fast/henikoff_s/user/jgreene/refs/hg38_plus_mm10_BWA/GRCh38_plus_
 
 
 #concat and index
-./concatenate_reference.py --humanRef $hg38 --mouseRef $mm10 --concatRef $OUT --tag UCSC_mm10
+./concatenate_reference.py --humanRef $hg38 --mouseRef $mm10 --concatRef $OUT --tag UCSC_mm10 --human_tag UCSC_hg38
 bwa index $OUT
