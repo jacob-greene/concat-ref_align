@@ -18,7 +18,14 @@ ConcatRef_genome: /fh/fast/henikoff_s/user/jgreene/refs/hg38_plus_mm10_BWA/GRCh3
 human_reference_genome: /shared/biodata/ngs/Reference/iGenomes/Homo_sapiens/UCSC/hg38/Sequence/BWAIndex/genome.fa #human reference genome
     #/path/to/GRCh38.fa #option used by Anna-Lisa in her projects
 
+#reference genome for realignment, with index files in same folder as .fa file
+mouse_reference_genome: /shared/biodata/ngs/Reference/iGenomes/Mus_musculus/UCSC/mm10/Sequence/BWAIndex/genome.fa #human reference genome
+    #/path/to/mm10.fa #option used by Anna-Lisa in her projects
+
 tag: UCSC_mm10  #make sure to use the same tag info of ConcatRef
+    #NCBI_GRCm38 #option used by Anna-Lisa in her projects
+
+human_tag: UCSC_hg38  #make sure to use the same tag info of ConcatRef
     #NCBI_GRCm38 #option used by Anna-Lisa in her projects
 
 #specify a path for the logs and results
@@ -31,7 +38,7 @@ known_polymorphic_sites2: /path/to/Mills_and_1000G_gold_standard.indels.hg38.vcf
 
 #SELECT IF DATA IS WHOLE GENOME SEQUENCES OR NOT (True or False)
 #determines if rule get_wgs_metrics is run
-is_wgs: False
+is_wgs: True
 
 #SELECT CORRECT BASE RECALIBRATOR GAP OPEN PENALTY
 #GATK recommends 40 for exomes and 30 for whole genomes

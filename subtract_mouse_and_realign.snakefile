@@ -149,8 +149,8 @@ rule remove_mouse:
 	output:
 		sorted_bam_step_1 = temp(config['results_path']+"/{samples}/{samples}_ConcatRef_sorted.human.bam"),
 		sorted_bam_step_1_index = temp(config['results_path']+"/{samples}/{samples}_ConcatRef_sorted.human.bam.bai"),
-		sorted_clean_bam = temp(config['results_path']+"/{samples}/{samples}_ConcatRef_sorted.cleaned.bam"),
-		sorted_clean_bam_index = temp(config['results_path']+"/{samples}/{samples}_ConcatRef_sorted.cleaned.bam.bai")
+		sorted_clean_bam = temp(config['results_path']+"/{samples}/{samples}_ConcatRef_sorted.human.cleaned.bam"),
+		sorted_clean_bam_index = temp(config['results_path']+"/{samples}/{samples}_ConcatRef_sorted.human.cleaned.bam.bai")
 	params:
 		path = config['results_path']+"/{samples}/",
 		filename = "{samples}_ConcatRef_sorted.bam",
@@ -177,9 +177,9 @@ rule remove_human:
 
 
 #the following rules realign post mouse subtraction
-rule unmap_cleaned:
+rule unmap_human_cleaned:
 	input:
-		bam_file = config['results_path']+"/{samples}/{samples}_ConcatRef_sorted.cleaned.bam"
+		bam_file = config['results_path']+"/{samples}/{samples}_ConcatRef_sorted.human.cleaned.bam"
 	output:
 		fastq1 = temp(config['results_path']+"/human_fastqs/{samples}_fastq1.fq.gz"),
 		fastq2 = temp(config['results_path']+"/human_fastqs/{samples}_fastq2.fq.gz"),
@@ -201,9 +201,46 @@ rule map_to_human_ref:
 		fastq1=config['results_path']+"/human_fastqs/{samples}_fastq1.fq.gz",
 		fastq2=config['results_path']+"/human_fastqs/{samples}_fastq2.fq.gz"
 	output:
-		temp(config['results_path']+"/{samples}/{samples}_unsorted.bam")
+		temp(config['results_path']+"/{samples}/{samples}_human.unsorted.bam")
 	params:
 		reference_genome=config["human_reference_genome"],
+		bwa=config["bwa"],
+		samtools=config["samtools"],
+		bwa_threads=config["bwa_threads"]
+	shell:
+		"({params.bwa} mem -t {params.bwa_threads} -M \
+		-R '@RG\\tID:no_id\\tLB:no_library\\tPL:no_platform\\tPU:no_unit\\tSM:{wildcards.samples}' \
+		{params.reference_genome} \
+		{input.fastq1} {input.fastq2} | {params.samtools} view -b - > {output})"
+
+#the following rules realign post HUMAN subtraction
+rule unmap_mouse_cleaned:
+	input:
+		bam_file = config['results_path']+"/{samples}/{samples}_ConcatRef_sorted.mouse.cleaned.bam"
+	output:
+		fastq1 = temp(config['results_path']+"/mouse_fastqs/{samples}_fastq1.fq.gz"),
+		fastq2 = temp(config['results_path']+"/mouse_fastqs/{samples}_fastq2.fq.gz"),
+		fastqUnpaired = temp(config['results_path']+"/mouse_fastqs/{samples}_fastq_unpaired.fq.gz")
+	params:
+		java=config["java"],
+		picard_jar = config["picard_jar"]
+	shell:
+		"{params.java} -XX:GCTimeLimit=50 -XX:GCHeapFreeLimit=10 -Xmx70G -jar \
+		{params.picard_jar} SamToFastq \
+		I={input.bam_file} \
+		TMP_DIR="+config['results_path']+"/human_tmps \
+		FASTQ={output.fastq1} \
+		SECOND_END_FASTQ={output.fastq2} \
+		UNPAIRED_FASTQ={output.fastqUnpaired}"
+
+rule map_to_mouse_ref:
+	input:
+		fastq1=config['results_path']+"/mouse_fastqs/{samples}_fastq1.fq.gz",
+		fastq2=config['results_path']+"/mouse_fastqs/{samples}_fastq2.fq.gz"
+	output:
+		temp(config['results_path']+"/{samples}/{samples}_mouse.unsorted.bam")
+	params:
+		reference_genome=config["mouse_reference_genome"],
 		bwa=config["bwa"],
 		samtools=config["samtools"],
 		bwa_threads=config["bwa_threads"]
