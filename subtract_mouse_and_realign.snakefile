@@ -286,13 +286,8 @@ rule bam2bed_human:
 		config['results_path']+"/{samples}/{samples}_human.dedup.bam"
 	output:
 		config['results_path']+"/{samples}/{samples}_human.bed"
-	params:
-		samtools=config["samtools"]
 	shell:
-		"({params.samtools} samtools view -B -h {input} \
-| bedtools bamtobed -bedpe -i stdin \
-| cut -f1,2,6,7 | sort -k1,1 -k2n,2n -k3n,3n \
-| awk -v OFS='\t' '{len = $3 - $2 ; print $0, len }' > {output})"
+		"(sh ./scripts/make_bed {input} {output})"
 
 rule bam2bed_mouse:
 	input:
@@ -302,7 +297,4 @@ rule bam2bed_mouse:
 	params:
 		samtools=config["samtools"]
 	shell:
-		"({params.samtools} samtools view -B -h {input} \
-| bedtools bamtobed -bedpe -i stdin \
-| cut -f1,2,6,7 | sort -k1,1 -k2n,2n -k3n,3n \
-| awk -v OFS='\t' '{len = $3 - $2 ; print $0, len }' > {output})"
+		"(sh ./scripts/make_bed {input} {output})"
