@@ -31,14 +31,13 @@ rule all:
 		expand(config['results_path']+"/{samples}/{samples}_ConcatRef_wgs_metrics.txt", samples=config["samples"]),
 		
 		#results from human realignment
-		expand(config['results_path']+"/{samples}/{samples}_marked_dup_metrics.txt", samples=config["samples"]),
-		expand(config['results_path']+"/{samples}/{samples}_recalibration_data.table", samples=config["samples"]),
-		expand(config['results_path']+"/{samples}/{samples}_recalibrated.bam", samples=config["samples"]),
-		expand(config['results_path']+"/{samples}/{samples}_recalibrated.bam.bai", samples=config["samples"]),
-		expand(config['results_path']+"/{samples}/{samples}_ASM.txt", samples=config["samples"]),
-		expand(config['results_path']+"/{samples}/{samples}_wgs_metrics.txt", samples=config["samples"]),
-		expand(config['results_path']+"/{samples}/{samples}_isize.txt", samples=config["samples"]),
-		expand(config['results_path']+"/{samples}/{samples}_isize.pdf", samples=config["samples"]),
+		expand(config['results_path']+"/{samples}/{samples}_human.marked_dup_metrics.txt", samples=config["samples"]),
+		expand(config['results_path']+"/{samples}/{samples}_mouse.marked_dup_metrics.txt", samples=config["samples"]),
+		expand(config['results_path']+"/{samples}/{samples}_human.dedup.bam", samples=config["samples"]),
+		expand(config['results_path']+"/{samples}/{samples}_mouse.dedup.bam", samples=config["samples"]),
+		expand(config['results_path']+"/{samples}/{samples}_human.bed", samples=config["samples"])
+		expand(config['results_path']+"/{samples}/{samples}_mouse.bed", samples=config["samples"])
+
 		
 		#results from mouse realignment
 
@@ -254,7 +253,7 @@ rule mark_dups_cleaned_human:
 	input:
 		config['results_path']+"/{samples}/{samples}_human.unsorted.bam"
 	output:
-		bam=temp(config['results_path']+"/{samples}/{samples}_human.dedup.bam"),
+		bam=protected(config['results_path']+"/{samples}/{samples}_human.dedup.bam"),
 		metrics=protected(config['results_path']+"/{samples}/{samples}_human.marked_dup_metrics.txt")
 	params:
 		samtools=config["samtools"],
@@ -270,7 +269,7 @@ rule mark_dups_cleaned_mouse:
 	input:
 		config['results_path']+"/{samples}/{samples}_mouse.unsorted.bam"
 	output:
-		bam=temp(config['results_path']+"/{samples}/{samples}_mouse.dedup.bam"),
+		bam=protected(config['results_path']+"/{samples}/{samples}_mouse.dedup.bam"),
 		metrics=protected(config['results_path']+"/{samples}/{samples}_mouse.marked_dup_metrics.txt")
 	params:
 		samtools=config["samtools"],
