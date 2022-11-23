@@ -50,12 +50,10 @@ rule unmap:
 		fastq2 = temp(config['results_path']+"/concatRef_fastqs/{samples}_fastq2.fq.gz"),
 		unpaired_fastq = temp(config['results_path']+"/concatRef_fastqs/{samples}_unpaired.fq.gz")
 	params:
-		java=config["java"],
-		picard_jar = config["picard_jar"],
+		picard = config["picard"],
 		input_reference_genome = config["input_reference_genome"] #required for cram input
 	shell:
-		"{params.java} -XX:GCTimeLimit=50 -XX:GCHeapFreeLimit=10 -Xmx85G \
-		-jar {params.picard_jar} SamToFastq I={input.bam_file} \
+		"{params.picard} SamToFastq I={input.bam_file} \
 		TMP_DIR="+config['results_path']+"/concatRef_tmps \
 		REFERENCE_SEQUENCE={params.input_reference_genome} \
 		FASTQ={output.fastq1} \
@@ -111,10 +109,9 @@ rule get_ConcatRef_wgs_metrics:
 		config['results_path']+"/{samples}/{samples}_ConcatRef_wgs_metrics.txt"
 	params:
 		reference_genome=config["ConcatRef_genome"],
-		java=config["java"],
-		picard_jar=config["picard_jar"]
+		picard=config["picard"]
 	run: 
-		shell("{params.java} -jar {params.picard_jar} CollectWgsMetrics \
+		shell("{params.picard} CollectWgsMetrics \
 		I={input.sorted_bam} \
 		O={output} \
 		R={params.reference_genome} \
@@ -132,10 +129,9 @@ rule get_ConcatRef_alignment_metrics:
 		config['results_path']+"/{samples}/{samples}_ConcatRef_ASM.txt"
 	params:
 		reference_genome=config["ConcatRef_genome"],
-		java=config["java"],
-		picard_jar=config["picard_jar"]
+		picard=config["picard"]
 	shell:
-		"{params.java} -jar {params.picard_jar} CollectAlignmentSummaryMetrics \
+		"{params.picard} CollectAlignmentSummaryMetrics \
 		R={params.reference_genome} \
 		I={input.sorted_bam} \
 		O={output} \
@@ -184,11 +180,9 @@ rule unmap_human_cleaned:
 		fastq2 = temp(config['results_path']+"/human_fastqs/{samples}_fastq2.fq.gz"),
 		fastqUnpaired = temp(config['results_path']+"/human_fastqs/{samples}_fastq_unpaired.fq.gz")
 	params:
-		java=config["java"],
-		picard_jar = config["picard_jar"]
+		picard = config["picard"]
 	shell:
-		"{params.java} -XX:GCTimeLimit=50 -XX:GCHeapFreeLimit=10 -Xmx70G -jar \
-		{params.picard_jar} SamToFastq \
+		"{params.picard} SamToFastq \
 		I={input.bam_file} \
 		TMP_DIR="+config['results_path']+"/human_tmps \
 		FASTQ={output.fastq1} \
@@ -221,11 +215,9 @@ rule unmap_mouse_cleaned:
 		fastq2 = temp(config['results_path']+"/mouse_fastqs/{samples}_fastq2.fq.gz"),
 		fastqUnpaired = temp(config['results_path']+"/mouse_fastqs/{samples}_fastq_unpaired.fq.gz")
 	params:
-		java=config["java"],
-		picard_jar = config["picard_jar"]
+		picard = config["picard"]
 	shell:
-		"{params.java} -XX:GCTimeLimit=50 -XX:GCHeapFreeLimit=10 -Xmx70G -jar \
-		{params.picard_jar} SamToFastq \
+		"{params.picard} SamToFastq \
 		I={input.bam_file} \
 		TMP_DIR="+config['results_path']+"/human_tmps \
 		FASTQ={output.fastq1} \
@@ -259,10 +251,10 @@ rule mark_dups_cleaned_human:
 		samtools=config["samtools"],
 		bwa_threads=config["bwa_threads"]
 	shell:
-		"({params.samtools} samtools sort -n -m 2G -@ {params.bwa_threads} {input} \
-    	| samtools fixmate -m -@ {params.bwa_threads} - - \
-    	| samtools sort -m 2G -@ {params.bwa_threads} - \
-    	| samtools markdup -r -s -f {output.metrics} --barcode-name -@ {params.bwa_threads} \
+		"({params.samtools}  sort -n -m 2G -@ {params.bwa_threads} {input} \
+    	| {params.samtools} fixmate -m -@ {params.bwa_threads} - - \
+    	| {params.samtools} sort -m 2G -@ {params.bwa_threads} - \
+    	| {params.samtools} markdup -r -s -f {output.metrics} --barcode-name -@ {params.bwa_threads} \
         - {output.bam})"
 
 rule mark_dups_cleaned_mouse:
@@ -275,10 +267,10 @@ rule mark_dups_cleaned_mouse:
 		samtools=config["samtools"],
 		bwa_threads=config["bwa_threads"]
 	shell:
-		"({params.samtools} samtools sort -n -m 2G -@ {params.bwa_threads} {input} \
-    	| samtools fixmate -m -@ {params.bwa_threads} - - \
-    	| samtools sort -m 2G -@ {params.bwa_threads} - \
-    	| samtools markdup -r -s -f {output.metrics} --barcode-name -@ {params.bwa_threads} \
+		"({params.samtools} sort -n -m 2G -@ {params.bwa_threads} {input} \
+    	| {params.samtools} fixmate -m -@ {params.bwa_threads} - - \
+    	| {params.samtools} sort -m 2G -@ {params.bwa_threads} - \
+    	| {params.samtools} markdup -r -s -f {output.metrics} --barcode-name -@ {params.bwa_threads} \
         - {output.bam})"
 
 rule bam2bed_human:

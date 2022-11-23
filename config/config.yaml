@@ -46,11 +46,10 @@ base_recalibrator_gap_open_penalty: 30.0
 
 #can adjust the number of threads used for bwa based on the data
 #suggested this matches cluster_slurm.yaml ncpus for map_to_reference rule
-bwa_threads: 4
+bwa_threads: 8
 
 #tools used.  need to be module loaded first.  see snakemake file for loads
-bwa: /path/to/bwa
-samtools: /path/to/samtools
-java: /path/to/java
-gatk: /path/to/gatk
-picard_jar: /path/to/picard.jar
+bwa: /app/software/BWA/0.7.17-foss-2018b/bin/bwa
+samtools: /app/software/SAMtools/1.16.1-GCC-11.2.0/bin/samtools
+gatk: /app/software/GATK/4.1.4.1-GCCcore-8.3.0-Java-11/gatk
+picard: /home/jgreene3/.conda/envs/2for1/bin/picard
