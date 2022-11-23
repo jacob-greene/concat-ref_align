@@ -250,134 +250,34 @@ rule map_to_mouse_ref:
 		{params.reference_genome} \
 		{input.fastq1} {input.fastq2} | {params.samtools} view -b - > {output})"
 
-rule sort_by_coord_cleaned:
+rule mark_dups_cleaned_human:
 	input:
-		config['results_path']+"/{samples}/{samples}_unsorted.bam"
+		config['results_path']+"/{samples}/{samples}_human.unsorted.bam"
 	output:
-		temp(config['results_path']+"/{samples}/{samples}_sorted.bam")
-	params:
-		samtools=config["samtools"]
-	shell:
-		"({params.samtools} sort -o {output} {input})"
-
-
-rule mark_dups_cleaned:
-	input:
-		config['results_path']+"/{samples}/{samples}_sorted.bam"
-	output:
-		bam=temp(config['results_path']+"/{samples}/{samples}_dups_marked.bam"),
-		metrics=protected(config['results_path']+"/{samples}/{samples}_marked_dup_metrics.txt")
+		bam=temp(config['results_path']+"/{samples}/{samples}_human.dedup.bam"),
+		metrics=protected(config['results_path']+"/{samples}/{samples}_human.marked_dup_metrics.txt")
 	params:
 		java=config["java"],
 		picard_jar = config["picard_jar"]
 	shell:
-		"({params.java} -XX:GCTimeLimit=50 -XX:GCHeapFreeLimit=10 -Xmx72G \
-		-jar {params.picard_jar} MarkDuplicates \
-		I={input} \
-		O={output.bam} \
-		M={output.metrics} \
-		TMP_DIR="+config['results_path']+"/human_tmps)"
+		"({params.samtools} samtools sort -n -m 2G -@ {params.bwa_threads} {input} \
+    	| samtools fixmate -m -@ {params.bwa_threads} - - \
+    	| samtools sort -m 2G -@ {params.bwa_threads} - \
+    	| samtools markdup -r -s -f {output.metrics} --barcode-name -@ {params.bwa_threads} \
+        - {output.bam})"
 
-
-rule build_recalibrator_model_cleaned:
+rule mark_dups_cleaned_mouse:
 	input:
-		config['results_path']+"/{samples}/{samples}_dups_marked.bam"
+		config['results_path']+"/{samples}/{samples}_mouse.unsorted.bam"
 	output:
-		protected(config['results_path']+"/{samples}/{samples}_recalibration_data.table")
-	params:
-		gatk=config["gatk"],
-		reference_genome=config["human_reference_genome"],
-		known_polymorphic_sites1=config["known_polymorphic_sites1"],
-		known_polymorphic_sites2=config["known_polymorphic_sites2"],
-		base_recalibrator_gap_open_penalty=config["base_recalibrator_gap_open_penalty"]
-	shell:
-		"{params.gatk} BaseRecalibrator \
-		-I {input} \
-		-R {params.reference_genome} \
-		--known-sites {params.known_polymorphic_sites1} \
-		--known-sites {params.known_polymorphic_sites2} \
-		--bqsr-baq-gap-open-penalty {params.base_recalibrator_gap_open_penalty} \
-		-O {output} \
-		--tmp-dir "+config['results_path']+"/human_tmps"
-
-
-rule apply_recalibration_cleaned:
-	input:
-		bam=config['results_path']+"/{samples}/{samples}_dups_marked.bam",
-		model=config['results_path']+"/{samples}/{samples}_recalibration_data.table"
-	output:
-		bam=protected(config['results_path']+"/{samples}/{samples}_recalibrated.bam"),
-		index=config['results_path']+"/{samples}/{samples}_recalibrated.bai"
-	params:
-		gatk=config["gatk"],
-		reference_genome=config["human_reference_genome"]
-	shell:
-		"({params.gatk} ApplyBQSR \
-		-R {params.reference_genome} \
-		-I {input.bam} \
-		--bqsr-recal-file {input.model} \
-		-O {output.bam})"
-
-
-rule rename_index_files_cleaned:
-	input:
-		config['results_path']+"/{samples}/{samples}_recalibrated.bai"
-	output:
-		protected(config['results_path']+"/{samples}/{samples}_recalibrated.bam.bai")
-	shell:
-		"(mv {input} {output})"
-
-
-rule get_alignment_metrics_cleaned:
-	input:
-		config['results_path']+"/{samples}/{samples}_recalibrated.bam"
-	output:
-		protected(config['results_path']+"/{samples}/{samples}_ASM.txt")
-	params:
-		reference_genome=config["human_reference_genome"],
-		java=config["java"],
-		picard_jar=config["picard_jar"]
-	shell:
-		"({params.java} -jar {params.picard_jar} CollectAlignmentSummaryMetrics \
-		R={params.reference_genome} \
-		I={input} \
-		O={output})"
-
-
-rule get_wgs_metrics_cleaned:
-	input:
-		config['results_path']+"/{samples}/{samples}_recalibrated.bam"
-	output:
-		protected(config['results_path']+"/{samples}/{samples}_wgs_metrics.txt")
-	params:
-		reference_genome=config["human_reference_genome"],
-		is_wgs=config["is_wgs"],
-		java=config["java"],
-		picard_jar=config["picard_jar"]
-	run:
-		if params.is_wgs:
-			shell("({params.java} -jar {params.picard_jar} CollectWgsMetrics \
-			I={input} \
-			O={output} \
-			R={params.reference_genome} \
-			COUNT_UNPAIRED=true \
-			USE_FAST_ALGORITHM=true \
-			INCLUDE_BQ_HISTOGRAM=true)")
-
-rule get_isize_cleaned:
-	input:
-		config['results_path']+"/{samples}/{samples}_recalibrated.bam"
-	output:
-		isize_txt = config['results_path']+"/{samples}/{samples}_isize.txt",
-		isize_pdf = config['results_path']+"/{samples}/{samples}_isize.pdf"
+		bam=temp(config['results_path']+"/{samples}/{samples}_mouse.dedup.bam"),
+		metrics=protected(config['results_path']+"/{samples}/{samples}_mouse.marked_dup_metrics.txt")
 	params:
 		java=config["java"],
-		picard_jar=config["picard_jar"]
+		picard_jar = config["picard_jar"]
 	shell:
- 		"time {params.java} -jar {params.picard_jar} CollectInsertSizeMetrics \
- 		I={input} \
- 		O={output.isize_txt} \
- 		H={output.isize_pdf} \
- 		HISTOGRAM_WIDTH=500 \
- 		TMP_DIR="+config['results_path']+"/human_tmps"
-
+		"({params.samtools} samtools sort -n -m 2G -@ {params.bwa_threads} {input} \
+    	| samtools fixmate -m -@ {params.bwa_threads} - - \
+    	| samtools sort -m 2G -@ {params.bwa_threads} - \
+    	| samtools markdup -r -s -f {output.metrics} --barcode-name -@ {params.bwa_threads} \
+        - {output.bam})"
