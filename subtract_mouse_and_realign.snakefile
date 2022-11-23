@@ -282,7 +282,7 @@ rule mark_dups_cleaned_mouse:
     	| samtools markdup -r -s -f {output.metrics} --barcode-name -@ {params.bwa_threads} \
         - {output.bam})"
 
-rule mark_dups_cleaned_human:
+rule bam2bed_human:
 	input:
 		config['results_path']+"/{samples}/{samples}_human.dedup.bam"
 	output:
@@ -295,7 +295,7 @@ rule mark_dups_cleaned_human:
 | cut -f1,2,6,7 | sort -k1,1 -k2n,2n -k3n,3n \
 | awk -v OFS='\t' '{len = $3 - $2 ; print $0, len }' > {output})"
 
-rule mark_dups_cleaned_mouse:
+rule bam2bed_mouse:
 	input:
 		config['results_path']+"/{samples}/{samples}_mouse.dedup.bam"
 	output:
