@@ -257,8 +257,8 @@ rule mark_dups_cleaned_human:
 		bam=temp(config['results_path']+"/{samples}/{samples}_human.dedup.bam"),
 		metrics=protected(config['results_path']+"/{samples}/{samples}_human.marked_dup_metrics.txt")
 	params:
-		java=config["java"],
-		picard_jar = config["picard_jar"]
+		samtools=config["samtools"],
+		bwa_threads=config["bwa_threads"]
 	shell:
 		"({params.samtools} samtools sort -n -m 2G -@ {params.bwa_threads} {input} \
     	| samtools fixmate -m -@ {params.bwa_threads} - - \
@@ -273,11 +273,37 @@ rule mark_dups_cleaned_mouse:
 		bam=temp(config['results_path']+"/{samples}/{samples}_mouse.dedup.bam"),
 		metrics=protected(config['results_path']+"/{samples}/{samples}_mouse.marked_dup_metrics.txt")
 	params:
-		java=config["java"],
-		picard_jar = config["picard_jar"]
+		samtools=config["samtools"],
+		bwa_threads=config["bwa_threads"]
 	shell:
 		"({params.samtools} samtools sort -n -m 2G -@ {params.bwa_threads} {input} \
     	| samtools fixmate -m -@ {params.bwa_threads} - - \
     	| samtools sort -m 2G -@ {params.bwa_threads} - \
     	| samtools markdup -r -s -f {output.metrics} --barcode-name -@ {params.bwa_threads} \
         - {output.bam})"
+
+rule mark_dups_cleaned_human:
+	input:
+		config['results_path']+"/{samples}/{samples}_human.dedup.bam"
+	output:
+		config['results_path']+"/{samples}/{samples}_human.bed"
+	params:
+		samtools=config["samtools"]
+	shell:
+		"({params.samtools} samtools view -B -h {input} \
+| bedtools bamtobed -bedpe -i stdin \
+| cut -f1,2,6,7 | sort -k1,1 -k2n,2n -k3n,3n \
+| awk -v OFS='\t' '{len = $3 - $2 ; print $0, len }' > {output})"
+
+rule mark_dups_cleaned_mouse:
+	input:
+		config['results_path']+"/{samples}/{samples}_mouse.dedup.bam"
+	output:
+		config['results_path']+"/{samples}/{samples}_mouse.bed"
+	params:
+		samtools=config["samtools"]
+	shell:
+		"({params.samtools} samtools view -B -h {input} \
+| bedtools bamtobed -bedpe -i stdin \
+| cut -f1,2,6,7 | sort -k1,1 -k2n,2n -k3n,3n \
+| awk -v OFS='\t' '{len = $3 - $2 ; print $0, len }' > {output})"
