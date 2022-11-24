@@ -30,16 +30,13 @@ rule all:
 		expand(config['results_path']+"/{samples}/{samples}_ConcatRef_ASM.txt", samples=config["samples"]),
 		expand(config['results_path']+"/{samples}/{samples}_ConcatRef_wgs_metrics.txt", samples=config["samples"]),
 		
-		#results from human realignment
+		#results from realignment
 		expand(config['results_path']+"/{samples}/{samples}_human.marked_dup_metrics.txt", samples=config["samples"]),
 		expand(config['results_path']+"/{samples}/{samples}_mouse.marked_dup_metrics.txt", samples=config["samples"]),
 		expand(config['results_path']+"/{samples}/{samples}_human.dedup.bam", samples=config["samples"]),
 		expand(config['results_path']+"/{samples}/{samples}_mouse.dedup.bam", samples=config["samples"]),
 		expand(config['results_path']+"/{samples}/{samples}_human.bed.gz", samples=config["samples"]),
 		expand(config['results_path']+"/{samples}/{samples}_mouse.bed.gz", samples=config["samples"])
-
-		
-		#results from mouse realignment
 
 
 rule unmap:
@@ -198,13 +195,13 @@ rule map_to_human_ref:
 	params:
 		reference_genome=config["human_reference_genome"],
 		bwa=config["bwa"],
-		samtools=config["samtools"],
+		bowtie2=config['bowtie2']
 		bwa_threads=config["bwa_threads"]
 	shell:
-		"({params.bwa} mem -t {params.bwa_threads} -M \
-		-R '@RG\\tID:no_id\\tLB:no_library\\tPL:no_platform\\tPU:no_unit\\tSM:{wildcards.samples}' \
-		{params.reference_genome} \
-		{input.fastq1} {input.fastq2} | {params.samtools} view -b - > {output})"
+		"({params.bowtie2} --very-sensitive-local --soft-clipped-unmapped-tlen --no-unal \
+		--no-mixed --no-discordant --dovetail --phred33 -I 10 -X 1000 -q --phred33 \
+		-I 10 -X 1000 --threads {params.bwa_threads} -x {params.reference_genome} \
+		-1 {input.fastq1} -2 {input.fastq2} > {output})"
 
 #the following rules realign post HUMAN subtraction
 rule unmap_mouse_cleaned:
@@ -233,13 +230,13 @@ rule map_to_mouse_ref:
 	params:
 		reference_genome=config["mouse_reference_genome"],
 		bwa=config["bwa"],
-		samtools=config["samtools"],
+		bowtie2=config['bowtie2']
 		bwa_threads=config["bwa_threads"]
 	shell:
-		"({params.bwa} mem -t {params.bwa_threads} -M \
-		-R '@RG\\tID:no_id\\tLB:no_library\\tPL:no_platform\\tPU:no_unit\\tSM:{wildcards.samples}' \
-		{params.reference_genome} \
-		{input.fastq1} {input.fastq2} | {params.samtools} view -b - > {output})"
+		"({params.bowtie2} --very-sensitive-local --soft-clipped-unmapped-tlen --no-unal \
+		--no-mixed --no-discordant --dovetail --phred33 -I 10 -X 1000 -q --phred33 \
+		-I 10 -X 1000 --threads {params.bwa_threads} -x {params.reference_genome} \
+		-1 {input.fastq1} -2 {input.fastq2} > {output})"
 
 rule mark_dups_cleaned_human:
 	input:
@@ -277,7 +274,7 @@ rule bam2bed_human:
 	input:
 		config['results_path']+"/{samples}/{samples}_human.dedup.bam"
 	output:
-		config['results_path']+"/{samples}/{samples}_human.bed.gz"
+		temp(config['results_path']+"/{samples}/{samples}_human.bed.gz")
 	shell:
 		"(sh ./scripts/make_bed.sh {input} {output})"
 
@@ -285,7 +282,7 @@ rule bam2bed_mouse:
 	input:
 		config['results_path']+"/{samples}/{samples}_mouse.dedup.bam"
 	output:
-		config['results_path']+"/{samples}/{samples}_mouse.bed.gz"
+		temp(config['results_path']+"/{samples}/{samples}_mouse.bed.gz")
 	params:
 		samtools=config["samtools"]
 	shell:
