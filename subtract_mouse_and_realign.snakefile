@@ -289,4 +289,4 @@ rule bam2bed_mouse:
 	params:
 		samtools=config["samtools"]
 	shell:
-		"(sh ./scripts/make_bed {input} {output})"
+		"(sh ./scripts/make_bed.sh {input} {output})"
