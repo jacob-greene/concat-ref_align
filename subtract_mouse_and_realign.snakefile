@@ -277,15 +277,15 @@ rule bam2bed_human:
 	input:
 		config['results_path']+"/{samples}/{samples}_human.dedup.bam"
 	output:
-		config['results_path']+"/{samples}/{samples}_human.bed"
+		config['results_path']+"/{samples}/{samples}_human.bed.gz"
 	shell:
-		"(sh ./scripts/make_bed {input} {output})"
+		"(sh ./scripts/make_bed.sh {input} {output})"
 
 rule bam2bed_mouse:
 	input:
 		config['results_path']+"/{samples}/{samples}_mouse.dedup.bam"
 	output:
-		config['results_path']+"/{samples}/{samples}_mouse.bed"
+		config['results_path']+"/{samples}/{samples}_mouse.bed.gz"
 	params:
 		samtools=config["samtools"]
 	shell:
