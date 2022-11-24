@@ -35,8 +35,8 @@ rule all:
 		expand(config['results_path']+"/{samples}/{samples}_mouse.marked_dup_metrics.txt", samples=config["samples"]),
 		expand(config['results_path']+"/{samples}/{samples}_human.dedup.bam", samples=config["samples"]),
 		expand(config['results_path']+"/{samples}/{samples}_mouse.dedup.bam", samples=config["samples"]),
-		expand(config['results_path']+"/{samples}/{samples}_human.bed", samples=config["samples"]),
-		expand(config['results_path']+"/{samples}/{samples}_mouse.bed", samples=config["samples"])
+		expand(config['results_path']+"/{samples}/{samples}_human.bed.gz", samples=config["samples"]),
+		expand(config['results_path']+"/{samples}/{samples}_mouse.bed.gz", samples=config["samples"])
 
 		
 		#results from mouse realignment
