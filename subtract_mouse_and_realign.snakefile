@@ -195,7 +195,7 @@ rule map_to_human_ref:
 	params:
 		reference_genome=config["human_reference_genome"],
 		bwa=config["bwa"],
-		bowtie2=config['bowtie2']
+		bowtie2=config['bowtie2'],
 		bwa_threads=config["bwa_threads"]
 	shell:
 		"({params.bowtie2} --very-sensitive-local --soft-clipped-unmapped-tlen --no-unal \
@@ -230,7 +230,7 @@ rule map_to_mouse_ref:
 	params:
 		reference_genome=config["mouse_reference_genome"],
 		bwa=config["bwa"],
-		bowtie2=config['bowtie2']
+		bowtie2=config['bowtie2'],
 		bwa_threads=config["bwa_threads"]
 	shell:
 		"({params.bowtie2} --very-sensitive-local --soft-clipped-unmapped-tlen --no-unal \
