@@ -19,15 +19,15 @@ human_reference_genome: /shared/biodata/ngs/Reference/iGenomes/Homo_sapiens/UCSC
     #/path/to/GRCh38.fa #option used by Anna-Lisa in her projects
 
 #reference genome for realignment, with index files in same folder as .fa file
-bowtie2_human_reference_genome: /shared/biodata/ngs/Reference/iGenomes/Homo_sapiens/UCSC/hg38/Sequence/Bowtie2Index/genome.fa #human reference genome
+bowtie2_human_reference_genome: /shared/biodata/ngs/Reference/iGenomes/Homo_sapiens/UCSC/hg38/Sequence/Bowtie2Index/genome #human reference genome
     #/path/to/GRCh38.fa #option used by Anna-Lisa in her projects
 
 #reference genome for realignment, with index files in same folder as .fa file
-mouse_reference_genome: /shared/biodata/ngs/Reference/iGenomes/Mus_musculus/UCSC/mm10/Sequence/BWAIndex/genome.fa #human reference genome
+mouse_reference_genome: /shared/biodata/ngs/Reference/iGenomes/Mus_musculus/UCSC/mm10/Sequence/BWAIndex/genome.fa #mouse reference genome
     #/path/to/mm10.fa #option used by Anna-Lisa in her projects
 
 #reference genome for realignment, with index files in same folder as .fa file
-bowtie2_mouse_reference_genome: /shared/biodata/ngs/Reference/iGenomes/Mus_musculus/UCSC/mm10/Sequence/Bowtie2Index/genome.fa #human reference genome
+bowtie2_mouse_reference_genome: /shared/biodata/ngs/Reference/iGenomes/Mus_musculus/UCSC/mm10/Sequence/Bowtie2Index/genome #mouse reference genome
     #/path/to/mm10.fa #option used by Anna-Lisa in her projects
 
 
