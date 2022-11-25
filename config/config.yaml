@@ -29,7 +29,7 @@ human_tag: UCSC_hg38  #make sure to use the same tag info of ConcatRef
     #NCBI_GRCm38 #option used by Anna-Lisa in her projects
 
 #specify a path for the logs and results
-results_path: /fh/fast/henikoff_s/user/jgreene/projects/sciCnT/data/DJ_Hs_BY_K27me3_KHRM3_220802/bams_ALL/concat-ref_OUT
+results_path: /fh/fast/henikoff_s/user/jgreene/projects/sciCnT/data/DJ_Hs_BY_K27me3_KHRM3_220802/bams_ALL/concat-ref_OUT_merge
 
 #SELECT CORRECT POLYMORPHIC SITES
 known_polymorphic_sites1: /path/to/dbsnp_151_hg38_with_chr.All_20180418.vcf.gz
@@ -46,10 +46,11 @@ base_recalibrator_gap_open_penalty: 30.0
 
 #can adjust the number of threads used for bwa based on the data
 #suggested this matches cluster_slurm.yaml ncpus for map_to_reference rule
-bwa_threads: 8
+bwa_threads: 16
 
 #tools used.  need to be module loaded first.  see snakemake file for loads
 bwa: /app/software/BWA/0.7.17-foss-2018b/bin/bwa
+bowtie2: /home/jgreene3/.conda/envs/2for1/bin/bowtie2
 samtools: /app/software/SAMtools/1.16.1-GCC-11.2.0/bin/samtools
 gatk: /app/software/GATK/4.1.4.1-GCCcore-8.3.0-Java-11/gatk
 picard: /home/jgreene3/.conda/envs/2for1/bin/picard

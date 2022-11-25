@@ -35,8 +35,8 @@ rule all:
 		expand(config['results_path']+"/{samples}/{samples}_mouse.marked_dup_metrics.txt", samples=config["samples"]),
 		expand(config['results_path']+"/{samples}/{samples}_human.dedup.bam", samples=config["samples"]),
 		expand(config['results_path']+"/{samples}/{samples}_mouse.dedup.bam", samples=config["samples"]),
-		expand(config['results_path']+"/{samples}/{samples}_human.bed.gz", samples=config["samples"]),
-		expand(config['results_path']+"/{samples}/{samples}_mouse.bed.gz", samples=config["samples"])
+		expand(config['results_path']+"/beds/{samples}_human.bed.gz", samples=config["samples"]),
+		expand(config['results_path']+"/beds/{samples}_mouse.bed.gz", samples=config["samples"])
 
 
 rule unmap:
@@ -84,7 +84,7 @@ rule sort_concatRef_by_coord:
 	params:
 		samtools=config["samtools"]
 	shell:
-		"({params.samtools} sort -o {output} {input})"
+		"({params.samtools} sort -@ {params.bwa_threads} -o {output} {input)"
 
 
 rule index_ConcatRef_bam:
@@ -95,7 +95,7 @@ rule index_ConcatRef_bam:
 	params:
 		samtools=config["samtools"]
 	shell:
-		"{params.samtools} index {input.sorted_bam} {output.sorted_bam_index}"
+		"{params.samtools} index -@ {params.bwa_threads} {input.sorted_bam} {output.sorted_bam_index}"
 
 
 rule get_ConcatRef_wgs_metrics:
@@ -274,7 +274,7 @@ rule bam2bed_human:
 	input:
 		config['results_path']+"/{samples}/{samples}_human.dedup.bam"
 	output:
-		temp(config['results_path']+"/{samples}/{samples}_human.bed.gz")
+		temp(config['results_path']+"/beds/{samples}_human.bed.gz")
 	shell:
 		"(sh ./scripts/make_bed.sh {input} {output})"
 
@@ -282,7 +282,7 @@ rule bam2bed_mouse:
 	input:
 		config['results_path']+"/{samples}/{samples}_mouse.dedup.bam"
 	output:
-		temp(config['results_path']+"/{samples}/{samples}_mouse.bed.gz")
+		temp(config['results_path']+"/beds/{samples}_mouse.bed.gz")
 	params:
 		samtools=config["samtools"]
 	shell:
