@@ -82,7 +82,8 @@ rule sort_concatRef_by_coord:
 	output:
 		temp(config['results_path']+"/{samples}/{samples}_ConcatRef_sorted.bam")
 	params:
-		samtools=config["samtools"]
+		samtools=config["samtools"],
+		bwa_threads=config["bwa_threads"]
 	shell:
 		"({params.samtools} sort -@ {params.bwa_threads} -o {output} {input)"
 
@@ -93,7 +94,8 @@ rule index_ConcatRef_bam:
 	output:
 		sorted_bam_index = temp(config['results_path']+"/{samples}/{samples}_ConcatRef_sorted.bam.bai")
 	params:
-		samtools=config["samtools"]
+		samtools=config["samtools"],
+		bwa_threads=config["bwa_threads"]
 	shell:
 		"{params.samtools} index -@ {params.bwa_threads} {input.sorted_bam} {output.sorted_bam_index}"
 
