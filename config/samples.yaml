@@ -1,5 +1,9 @@
 samples:
-  40cpw: /fh/fast/henikoff_s/user/jgreene/projects/sciCnT/data/DJ_Hs_BY_K27me3_KHRM3_220802/bams_ALL/sams_merge/DJ_Hs_BY_K27me3_KHRM3_40cpw_220802.sam
-  20cpw: /fh/fast/henikoff_s/user/jgreene/projects/sciCnT/data/DJ_Hs_BY_K27me3_KHRM3_220802/bams_ALL/sams_merge/DJ_Hs_BY_K27me3_KHRM3_20cpw_220802.sam
-  10cpw: /fh/fast/henikoff_s/user/jgreene/projects/sciCnT/data/DJ_Hs_BY_K27me3_KHRM3_220802/bams_ALL/sams_merge/DJ_Hs_BY_K27me3_KHRM3_10cpw_220802.sam
-  5cpw: /fh/fast/henikoff_s/user/jgreene/projects/sciCnT/data/DJ_Hs_BY_K27me3_KHRM3_220802/bams_ALL/sams_merge/DJ_Hs_BY_K27me3_KHRM3_5cpw_220802.sam
+  human_40cpw: /shared/ngs/illumina/henikoff/220817_bowtie2/single_cell/DJ_Hs/hg38/sams/DJ_Hs_BY_K27me3_KHRM3_40cpw_220802.sam
+  human_20cpw: /shared/ngs/illumina/henikoff/220817_bowtie2/single_cell/DJ_Hs/hg38/sams/DJ_Hs_BY_K27me3_KHRM3_20cpw_220802.sam
+  human_10cpw: /shared/ngs/illumina/henikoff/220817_bowtie2/single_cell/DJ_Hs/hg38/sams/DJ_Hs_BY_K27me3_KHRM3_10cpw_220802.sam
+  human_5cpw: /shared/ngs/illumina/henikoff/220817_bowtie2/single_cell/DJ_Hs/hg38/sams/DJ_Hs_BY_K27me3_KHRM3_5cpw_220802.sam
+  mouse_40cpw: /shared/ngs/illumina/henikoff/220817_bowtie2/single_cell/DJ_Hs/mm10/sams/DJ_Hs_BY_K27me3_KHRM3_40cpw_220802.sam
+  mouse_20cpw: /shared/ngs/illumina/henikoff/220817_bowtie2/single_cell/DJ_Hs/mm10/sams/DJ_Hs_BY_K27me3_KHRM3_20cpw_220802.sam
+  mouse_10cpw: /shared/ngs/illumina/henikoff/220817_bowtie2/single_cell/DJ_Hs/mm10/sams/DJ_Hs_BY_K27me3_KHRM3_10cpw_220802.sam
+  mouse_5cpw: /shared/ngs/illumina/henikoff/220817_bowtie2/single_cell/DJ_Hs/mm10/sams/DJ_Hs_BY_K27me3_KHRM3_5cpw_220802.sam

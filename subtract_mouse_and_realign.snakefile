@@ -195,7 +195,7 @@ rule map_to_human_ref:
 	output:
 		temp(config['results_path']+"/{samples}/{samples}_human.unsorted.bam")
 	params:
-		reference_genome=config["human_reference_genome"],
+		reference_genome=config["bowtie2_human_reference_genome"],
 		bwa=config["bwa"],
 		bowtie2=config['bowtie2'],
 		bwa_threads=config["bwa_threads"]
@@ -230,7 +230,7 @@ rule map_to_mouse_ref:
 	output:
 		temp(config['results_path']+"/{samples}/{samples}_mouse.unsorted.bam")
 	params:
-		reference_genome=config["mouse_reference_genome"],
+		reference_genome=config["bowtie2_mouse_reference_genome"],
 		bwa=config["bwa"],
 		bowtie2=config['bowtie2'],
 		bwa_threads=config["bwa_threads"]
