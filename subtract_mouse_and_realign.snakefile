@@ -85,7 +85,7 @@ rule sort_concatRef_by_coord:
 		samtools=config["samtools"],
 		bwa_threads=config["bwa_threads"]
 	shell:
-		"({params.samtools} sort -@ {params.bwa_threads} -o {output} {input)"
+		"({params.samtools} sort -@ {params.bwa_threads} -o {output} {input})"
 
 
 rule index_ConcatRef_bam:
