@@ -38,7 +38,7 @@ human_tag: UCSC_hg38  #make sure to use the same tag info of ConcatRef
     #NCBI_GRCm38 #option used by Anna-Lisa in her projects
 
 #specify a path for the logs and results
-results_path: /fh/fast/henikoff_s/user/jgreene/projects/sciCnT/data/DJ_Hs_BY_K27me3_KHRM3_220802/bams_ALL/concat-ref_OUT_merge
+results_path: /fh/fast/henikoff_s/user/jgreene/projects/sciCnT/data/DJ_Hs_BY_K27me3_KHRM3_220802/bams_ALL/concat-ref_OUT_final
 
 #SELECT CORRECT POLYMORPHIC SITES
 known_polymorphic_sites1: /path/to/dbsnp_151_hg38_with_chr.All_20180418.vcf.gz
